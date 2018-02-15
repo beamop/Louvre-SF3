@@ -288,28 +288,5 @@ class Reservation
     {
         return $this->ip;
     }
-
-    /**
-     * Add billet
-     *
-     * @param \AppBundle\Entity\Billet $billet
-     *
-     * @return Reservation
-     */
-    public function addBillet(\AppBundle\Entity\Billet $billet)
-    {
-        $this->billets[] = $billet;
-
-        return $this;
-    }
-
-    /**
-     * Remove billet
-     *
-     * @param \AppBundle\Entity\Billet $billet
-     */
-    public function removeBillet(\AppBundle\Entity\Billet $billet)
-    {
-        $this->billets->removeElement($billet);
-    }
 }
+
