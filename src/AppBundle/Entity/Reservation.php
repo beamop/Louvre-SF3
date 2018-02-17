@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="reservation")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ReservationRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Reservation
 {
@@ -22,11 +23,10 @@ class Reservation
     private $id;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="dateReservation", type="datetime")
+     * @var \Datetime
+     * @ORM\Column(type="date")
      */
-    private $dateReservation;
+    protected $dateReservation;
 
     /**
      * @var string
@@ -42,53 +42,43 @@ class Reservation
     private $billets;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="demiJournee", type="boolean")
+     * @ORM\Column(type="boolean")
      */
     private $demiJournee;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="prix", type="decimal", precision=2, scale=0)
+     * @ORM\Column(type="decimal", precision=2)
      */
     private $prix;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="payer", type="boolean")
+     * @ORM\Column(type="boolean")
      */
     private $payer;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="codeReservation", type="string", length=255, unique=true)
+     * @ORM\Column(type="string", unique= true)
      */
     private $codeReservation;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="ip", type="string", length=15)
+     * @ORM\Column(type="string", length=15)
      */
     private $ip;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
         $this->billets = new \Doctrine\Common\Collections\ArrayCollection();
         $this->demiJournee = false;
         $this->payer = false;
-        $this->codeReservation = uniqid('CODE_RESA_');
+        $this->codeReservation = uniqid('ID_RESA_');
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -98,7 +88,7 @@ class Reservation
     }
 
     /**
-     * Set dateReservation
+     * Set dateReservation.
      *
      * @param \DateTime $dateReservation
      *
@@ -106,13 +96,13 @@ class Reservation
      */
     public function setDateReservation($dateReservation)
     {
-        $this->dateReservation = $dateReservation;
+        $this->dateReservation = \DateTime::createFromFormat('d-m-Y', $dateReservation);
 
         return $this;
     }
 
     /**
-     * Get dateReservation
+     * Get dateReservation.
      *
      * @return \DateTime
      */
@@ -122,7 +112,7 @@ class Reservation
     }
 
     /**
-     * Set email
+     * Set email.
      *
      * @param string $email
      *
@@ -136,7 +126,7 @@ class Reservation
     }
 
     /**
-     * Get email
+     * Get email.
      *
      * @return string
      */
@@ -145,58 +135,25 @@ class Reservation
         return $this->email;
     }
 
-    /**
-     * Set billets
-     *
-     * @param string $billets
-     *
-     * @return Reservation
-     */
-    public function setBillets($billets)
+    public function addDemiJournee()
     {
-        $this->billets = $billets;
+        $this->demiJournee = true;
 
         return $this;
     }
 
     /**
-     * Get billets
-     *
-     * @return string
-     */
-    public function getBillets()
-    {
-        return $this->billets;
-    }
-
-    /**
-     * Set demiJournee
-     *
-     * @param boolean $demiJournee
-     *
-     * @return Reservation
-     */
-    public function setDemiJournee($demiJournee)
-    {
-        $this->demiJournee = $demiJournee;
-
-        return $this;
-    }
-
-    /**
-     * Get demiJournee
-     *
      * @return bool
      */
-    public function getDemiJournee()
+    public function isDemiJournee()
     {
         return $this->demiJournee;
     }
 
     /**
-     * Set prix
+     * Set prix.
      *
-     * @param string $prix
+     * @param int $prix
      *
      * @return Reservation
      */
@@ -208,19 +165,133 @@ class Reservation
     }
 
     /**
-     * Get prix
+     * Get prix.
      *
-     * @return string
+     * @return int
      */
     public function getPrix()
     {
-        return $this->prix;
+        $prix = 0;
+        if ($this->memeNom() === true) {
+            if ($this->isDemiJournee() === true) {
+                $prix = 17.5;
+            } else {
+                $prix = 35;
+            }
+        } else {
+            foreach ($this->billets as $billet) {
+                if ($this->isDemiJournee() === true) {
+                    $prix = $prix + ($billet->getPrix() / 2);
+                } else {
+                    $prix = $prix + $billet->getPrix();
+                }
+            }
+        }
+
+        return $prix;
+    }
+
+    public function setBillets($billets)
+    {
+        foreach ($billets as $billet) {
+            $billet->setReservation($this);
+        }
+
+        $this->billets = $billets;
+
+        return $this;
+    }
+    /**
+     * Add billet.
+     *
+     * @param \AppBundle\Entity\Billet $billet
+     *
+     * @return Reservation
+     */
+    public function addBillet(\AppBundle\Entity\Billet $billet)
+    {
+        $billet->setReservation($this);
+        $this->billets[] = $billet;
+
+        return $this;
     }
 
     /**
-     * Set payer
+     * Remove billet.
      *
-     * @param boolean $payer
+     * @param \AppBundle\Entity\Billet $billet
+     */
+    public function removeBillet(\AppBundle\Entity\Billet $billet)
+    {
+        $this->billets->removeElement($billet);
+    }
+
+    /**
+     * Get billets.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getBillets()
+    {
+        return $this->billets;
+    }
+
+    public function memeNom()
+    {
+        $nom = null;
+        $memeNom = 0;
+        foreach ($this->billets as $key => $billet) {
+            if ($key === 0) {
+                $nom = $billet->getNom();
+            }
+            if ($billet->getNom() == $nom) {
+                ++$memeNom;
+            }
+        }
+
+        return $memeNom == 4;
+    }
+
+    public function addPayement()
+    {
+        $this->payer = true;
+
+        return $this;
+    }
+
+    public function isPayer()
+    {
+        return $this->payer;
+    }
+
+    /**
+     * Set demiJournee.
+     *
+     * @param bool $demiJournee
+     *
+     * @return Reservation
+     */
+    public function setDemiJournee($demiJournee)
+    {
+        $this->demiJournee = $demiJournee;
+
+        return $this;
+    }
+
+    /**
+     * Get demiJournee.
+     *
+     * @return bool
+     */
+    public function getDemiJournee()
+    {
+        return $this->demiJournee;
+    }
+
+    /**
+     * Set payer.
+     *
+     * @param bool $payer
      *
      * @return Reservation
      */
@@ -232,7 +303,7 @@ class Reservation
     }
 
     /**
-     * Get payer
+     * Get payer.
      *
      * @return bool
      */
@@ -241,24 +312,45 @@ class Reservation
         return $this->payer;
     }
 
-    /**
-     * Set codeReservation
-     *
-     * @param string $codeReservation
-     *
-     * @return Reservation
-     */
-    public function setCodeReservation($codeReservation)
-    {
-        $this->codeReservation = $codeReservation;
 
-        return $this;
+
+    public function memeJour()
+    {
+        $nowDate = date('Y-m-d');
+        $nowHeure = date('H');
+
+        if ($this->getDateReservation()->format('Y-m-d') == $nowDate && $nowHeure > 14) {
+            $this->addDemiJournee(true);
+        }
     }
 
     /**
-     * Get codeReservation
-     *
-     * @return string
+     * @ORM\PrePersist()
+     */
+    public function calculPrix()
+    {
+        if ($this->memeNom() === true) {
+            if ($this->isDemiJournee() === true) {
+                $this->setPrix(17.5);
+            } else {
+                $this->setPrix(35);
+            }
+        } else {
+            $prix = 0;
+            foreach ($this->getBillets() as $billet) {
+                if ($this->isDemiJournee() === true) {
+                    $prix = $prix + ($billet->getPrix() / 2);
+                } else {
+                    $prix = $prix + $billet->getPrix();
+                }
+            }
+            $this->setPrix($prix);
+        }
+    }
+
+
+    /**
+     * @return mixed
      */
     public function getCodeReservation()
     {
@@ -266,23 +358,20 @@ class Reservation
     }
 
     /**
-     * Set ip
-     *
-     * @param string $ip
-     *
-     * @return Reservation
+     * @param mixed $codeReservation
      */
-    public function setIp($ip)
+    public function setCodeReservation($codeReservation)
     {
-        $this->ip = $ip;
+        $this->codeReservation = $codeReservation;
+    }
 
-        return $this;
+    public function getPriceFormated()
+    {
+        return number_format($this->getPrix(),"2",'','');
     }
 
     /**
-     * Get ip
-     *
-     * @return string
+     * @return mixed
      */
     public function getIp()
     {
@@ -290,26 +379,13 @@ class Reservation
     }
 
     /**
-     * Add billet
-     *
-     * @param \AppBundle\Entity\Billet $billet
-     *
-     * @return Reservation
+     * @param mixed $ip
+     * @return $this
      */
-    public function addBillet(\AppBundle\Entity\Billet $billet)
+    public function setIp($ip)
     {
-        $this->billets[] = $billet;
+        $this->ip = $ip;
 
         return $this;
-    }
-
-    /**
-     * Remove billet
-     *
-     * @param \AppBundle\Entity\Billet $billet
-     */
-    public function removeBillet(\AppBundle\Entity\Billet $billet)
-    {
-        $this->billets->removeElement($billet);
     }
 }

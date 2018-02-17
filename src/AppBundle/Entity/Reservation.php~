@@ -22,11 +22,10 @@ class Reservation
     private $id;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="dateReservation", type="datetime")
+     * @var \Datetime
+     * @ORM\Column(type="date")
      */
-    private $dateReservation;
+    protected $dateReservation;
 
     /**
      * @var string
@@ -42,50 +41,30 @@ class Reservation
     private $billets;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="demiJournee", type="boolean")
+     * @ORM\Column(type="boolean")
      */
     private $demiJournee;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="prix", type="decimal", precision=2, scale=0)
+     * @ORM\Column(type="decimal", precision=2)
      */
     private $prix;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="payer", type="boolean")
+     * @ORM\Column(type="boolean")
      */
     private $payer;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="codeReservation", type="string", length=255, unique=true)
+     * @ORM\Column(type="string", unique= true)
      */
     private $codeReservation;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="ip", type="string", length=15)
+     * @ORM\Column(type="string", length=15)
      */
     private $ip;
 
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->billets = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->demiJournee = false;
-        $this->payer = false;
-        $this->codeReservation = uniqid('CODE_RESA_');
-    }
 
     /**
      * Get id
@@ -98,6 +77,17 @@ class Reservation
     }
 
     /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->billets = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->demiJournee = false;
+        $this->payer = false;
+        $this->codeReservation = uniqid('ID_RESA_');
+    }
+
+    /**
      * Set dateReservation
      *
      * @param \DateTime $dateReservation
@@ -106,7 +96,7 @@ class Reservation
      */
     public function setDateReservation($dateReservation)
     {
-        $this->dateReservation = $dateReservation;
+        $this->dateReservation = \DateTime::createFromFormat('d-m-Y', $dateReservation);
 
         return $this;
     }
@@ -288,5 +278,28 @@ class Reservation
     {
         return $this->ip;
     }
-}
 
+    /**
+     * Add billet
+     *
+     * @param \AppBundle\Entity\Billet $billet
+     *
+     * @return Reservation
+     */
+    public function addBillet(\AppBundle\Entity\Billet $billet)
+    {
+        $this->billets[] = $billet;
+
+        return $this;
+    }
+
+    /**
+     * Remove billet
+     *
+     * @param \AppBundle\Entity\Billet $billet
+     */
+    public function removeBillet(\AppBundle\Entity\Billet $billet)
+    {
+        $this->billets->removeElement($billet);
+    }
+}

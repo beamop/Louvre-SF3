@@ -10,4 +10,30 @@ namespace AppBundle\Repository;
  */
 class ReservationRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getDateFull()
+    {
+        $query = $this->createQueryBuilder('r');
+
+        $query->select('r.dateReservation')
+            ->innerJoin('r.billets', 'b')
+            ->where('r.payer = true')
+            ->having('COUNT(b.id) = 1000')
+            ->orderBy('r.dateReservation', 'ASC')
+            ->groupBy('r.dateReservation');
+
+        return $query->getQuery()->getArrayResult();
+    }
+
+    public function getNumberBilletsForDate($date)
+    {
+        $queryBuilder = $this->createQueryBuilder('r');
+
+        $queryBuilder->innerJoin('r.billets', 'b')
+            ->select('COUNT(b.id) as numberBillet')
+            ->where('r.dateReservation = :date')
+            ->andWhere('r.payer = true')
+            ->setParameter('date', $date);
+
+        return $queryBuilder->getQuery()->getSingleScalarResult();
+    }
 }

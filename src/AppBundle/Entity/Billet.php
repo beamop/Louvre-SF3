@@ -41,7 +41,7 @@ class Billet
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="dateNaissance", type="datetime")
+     * @ORM\Column(name="date_naissance", type="date")
      */
     private $dateNaissance;
 
@@ -80,7 +80,7 @@ class Billet
     private $pays;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -152,9 +152,10 @@ class Billet
      *
      * @return Billet
      */
-    public function setDateNaissance($dateNaissance)
+    public function setDateNaissance(\DateTime $dateNaissance)
     {
         $this->dateNaissance = $dateNaissance;
+        $this->setAge();
 
         return $this;
     }
@@ -172,13 +173,18 @@ class Billet
     /**
      * Set age
      *
-     * @param integer $age
+     * @param int $age
      *
      * @return Billet
      */
-    public function setAge($age)
+    public function setAge()
     {
-        $this->age = $age;
+        $now = new \DateTime();
+        $age = $this->dateNaissance->diff($now);
+
+        $this->age = $age->y;
+
+        $this->setPrix();
 
         return $this;
     }
@@ -196,13 +202,20 @@ class Billet
     /**
      * Set reduction
      *
-     * @param boolean $reduction
+     * @param bool $reduction
      *
      * @return Billet
      */
     public function setReduction($reduction)
     {
         $this->reduction = $reduction;
+
+        return $this;
+    }
+
+    public function addReduction()
+    {
+        $this->reduction = true;
 
         return $this;
     }
@@ -214,17 +227,26 @@ class Billet
      */
     public function getReduction()
     {
+        if ($this->age < 12 && $this->age > 60) {
+            return false;
+        }
+
+        return $this->reduction;
+    }
+
+    public function isReduit()
+    {
         return $this->reduction;
     }
 
     /**
      * Set reservation
      *
-     * @param string $reservation
+     * @param \AppBundle\Entity\Reservation
      *
      * @return Billet
      */
-    public function setReservation($reservation)
+    public function setReservation(\AppBundle\Entity\Reservation $reservation)
     {
         $this->reservation = $reservation;
 
@@ -234,23 +256,28 @@ class Billet
     /**
      * Get reservation
      *
-     * @return string
+     * @return \AppBundle\Entity\Reservation
      */
     public function getReservation()
     {
         return $this->reservation;
     }
 
-    /**
-     * Set prix
-     *
-     * @param integer $prix
-     *
-     * @return Billet
-     */
-    public function setPrix($prix)
+    public function setPrix()
     {
-        $this->prix = $prix;
+        if ($this->age < 4) {
+            $this->prix = 0;
+        } elseif ($this->age >= 4 && $this->age <= 12) {
+            $this->prix = 8;
+        } elseif ($this->age >= 60) {
+            $this->prix = 12;
+        } else {
+            if ($this->isReduit() === true) {
+                $this->prix = 10;
+            } else {
+                $this->prix = self::PRIX;
+            }
+        }
 
         return $this;
     }
@@ -268,7 +295,7 @@ class Billet
     /**
      * Set pays
      *
-     * @param string $pays
+     * @param mixed $pays
      *
      * @return Billet
      */
@@ -282,7 +309,7 @@ class Billet
     /**
      * Get pays
      *
-     * @return string
+     * @return mixed
      */
     public function getPays()
     {
