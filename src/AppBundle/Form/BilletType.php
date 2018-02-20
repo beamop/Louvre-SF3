@@ -21,22 +21,28 @@ class BilletType extends AbstractType
     {
         $builder
             ->add('nom', TextType::class, array(
-                'label' => 'Nom :',
+                'label' => 'Nom',
+                'attr' => array(
+                    'placeholder' => 'Nom'
+                ),
             ))
             ->add('prenom', TextType::class, array(
-                'label' => 'Prénom :',
+                'label' => 'Prénom',
+                'attr' => array(
+                    'placeholder' => 'Prénom'
+                ),
             ))
             ->add('reduction', CheckboxType::class, array(
                 'label' => 'Tarif réduit',
                 'required' => false,
             ))
             ->add('dateNaissance', DateType::class, array(
-                'label' => 'Date de naissance :',
-                'format' => 'dd/MM/yyyy',
+                'label' => 'Date de naissance',
+                'format' => 'dd / MM / yyyy',
                 'placeholder' => array(
                     'year' => 'AAAA',
-                    'month' => 'mm',
-                    'day' => 'jj'
+                    'month' => 'MM',
+                    'day' => 'JJ'
                 ),
                 'years' => range(2018, 1918),
             ))

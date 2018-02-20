@@ -5,10 +5,11 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Billet;
 use AppBundle\Entity\Reservation;
 use AppBundle\Form\ReservationType;
+use AppBundle\Payment\StripePayment;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
 
 class AppController extends Controller
 {
@@ -22,8 +23,10 @@ class AppController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $reservation = new Reservation();
-        $reservation->addBillet(new Billet())
-            ->setIp($request->getClientIp());
+        $reservation
+            ->addBillet(new Billet())
+            ->setIp($request->getClientIp()
+        );
 
         $listDatesCompletes = $em->getRepository('AppBundle:Reservation')->getDateFull();
 
@@ -35,16 +38,50 @@ class AppController extends Controller
             $em->persist($reservation);
             $em->flush();
 
-            return new Response('OK!');
+            return $this->redirectToRoute('confirmation', array(
+                'id' => $reservation->getId(),
+            ));
         }
 
         $formView = $form->createView();
 
         return $this->render('reservation/reservation.html.twig', array(
             'form' => $formView,
-            'listDatesCompletes' => $listDatesCompletes
+            'listDatesCompletes' => $listDatesCompletes,
         ));
+    }
 
+
+    /**
+     * @Route("/confirmation/{id}", name="confirmation")
+     *
+     * @Security("request.getClientIp() == reservation.getIp() && reservation.isPayer() == false", statusCode=403, message="Une erreur est survenue.")
+     *
+     * @param Reservation $reservation
+     * @param Request $request
+     * @param StripePayment $payment
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function confirmationAction(Reservation $reservation, Request $request, StripePayment $payment)
+    {
+        return $this->render('payment/payment.html.twig', array(
+            'reservation' => $reservation,
+            'template' => 'reservation/reservation.html.twig',
+        ));
+    }
+
+    /**
+     * @Route("/merci/{id}", name="merci")
+     *
+     * @Security("request.getClientIp() == reservation.getIp() && reservation.isPayer() == true", statusCode=403, message="Une erreur est survenue.")
+     *
+     * @param Request $request
+     * @param Reservation $reservation
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function merciAction(Reservation $reservation, Request $request)
+    {
+        return $this->render('merci/merci.html.twig', array('reservation' => $reservation));
     }
 
 }

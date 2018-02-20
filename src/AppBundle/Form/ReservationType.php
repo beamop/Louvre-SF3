@@ -21,10 +21,18 @@ class ReservationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('dateReservation', TextType::class)
-            ->add('email', EmailType::class)
+            ->add('dateReservation', TextType::class, array(
+                'attr' => array(
+                    'placeholder' => date('d-m-Y')
+                ),
+            ))
+            ->add('email', EmailType::class, array(
+                'attr' => array(
+                    'placeholder' => 'email@domain.com'
+                ),
+            ))
             ->add('demiJournee', CheckboxType::class, array(
-                'label' => 'Demi journée* :',
+                'label' => 'Demi journée*',
                 'required' => false,
             ))
             ->add('billets', CollectionType::class, array(
@@ -33,13 +41,15 @@ class ReservationType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'label' => 'Billet',
-                'label_attr' => array('class' => 'col-xs-2'),
                 'constraints' => array(
                     new Valid()
                 ),
             ))
             ->add('save', SubmitType::class, array(
                 'label' => 'Valider la réservation',
+                'attr' => array(
+                    'class' => 'btn btn-finish btn-fill btn-warning btn-wd btn-sm'
+                ),
             ))
         ;
     }
