@@ -1,1 +1,77 @@
-merci!
+{{ block('head', template_reservation) }}
+
+{{ block('stylesheets_invoice', template_payment) }}
+
+<body class="image-container">
+<div class="container animated fadeIn">
+    <div class="invoice">
+        <header>
+            <section>
+                <h1>Merci pour votre réservation</h1>
+                <span>{{ reservation.dateReservation|date('d/m/Y') }}</span>
+            </section>
+
+            <section>
+                <span>{{ reservation.codeReservation|slice(17,21) }}</span>
+            </section>
+        </header>
+
+        <main>
+            <section>
+                <span>Récapitulatif</span>
+            </section>
+
+            <section>
+                <figure>
+                    <span>Nombre de billet(s)</span>
+                    <span> </span>
+                    <span>{{ reservation.billets|length }}</span>
+                </figure>
+
+                <figure>
+                    <span>Demi-journée</span>
+                    <span> </span>
+                    <span>{% if reservation.demiJournee == true %}✔️{% else %}❌{% endif %}</span>
+                </figure>
+
+                {% for billet in reservation.billets %}
+                    <figure>
+                        <span>Nom</span>
+                        <span> </span>
+                        <span>{{ billet.nom }}</span>
+                    </figure>
+
+                    <figure>
+                        <span>Prénom</span>
+                        <span> </span>
+                        <span>{{ billet.prenom }}</span>
+                    </figure>
+
+                    <figure>
+                        <span>Date de naissance</span>
+                        <span> </span>
+                        <span>{{ billet.dateNaissance|date('d/m/Y') }}</span>
+                    </figure>
+
+                    <figure>
+                        <span>Réduction</span>
+                        <span> </span>
+                        <span>{% if billet.reduction == true %}✔️{% else %}❌{% endif %}</span>
+                    </figure>
+                {% endfor %}
+
+            </section>
+
+            <section>
+                <span>Prix TTC</span>
+                <span>{{ reservation.prix }} EUR (€)</span>
+            </section>
+        </main>
+
+        <footer>
+            <a></a>
+            <button class="pdf">Imprimer en format PDF</button>
+        </footer>
+    </div>
+</div>
+</body>

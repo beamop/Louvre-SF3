@@ -73,7 +73,7 @@ class AppController extends Controller
     /**
      * @Route("/merci/{id}", name="merci")
      *
-     * @Security("request.getClientIp() == reservation.getIp() && reservation.isPayer() == true", statusCode=403, message="Une erreur est survenue.")
+     * @Security("request.getClientIp() == reservation.getIp()", statusCode=403, message="Une erreur est survenue.")
      *
      * @param Request $request
      * @param Reservation $reservation
@@ -81,7 +81,11 @@ class AppController extends Controller
      */
     public function merciAction(Reservation $reservation, Request $request)
     {
-        return $this->render('merci/merci.html.twig', array('reservation' => $reservation));
+        return $this->render('merci/merci.html.twig', array(
+            'reservation' => $reservation,
+            'template_reservation' => 'reservation/reservation.html.twig',
+            'template_payment' => 'payment/payment.html.twig',
+        ));
     }
 
 }

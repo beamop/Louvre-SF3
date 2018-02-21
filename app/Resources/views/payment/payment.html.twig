@@ -1,3 +1,4 @@
+{% block head %}
 <head>
     {{ block('meta', template) }}
 
@@ -17,14 +18,10 @@
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('img/apple-icon.png') }}">
     <link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}">
 
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2" type="text/javascript"></script>
-
     <!-- Stripe Checkout -->
     <script src="https://checkout.stripe.com/checkout.js" type="text/javascript"></script>
 </head>
-
-<body class="image-container">
+{% endblock %}
 
 {% block stylesheets_invoice %}
 <style>
@@ -72,7 +69,7 @@
         -o-align-items: flex-start;
         align-items: flex-start;
         -ms-flex-align: start;
-        background-color: #fe8888;
+        background-color: #fff;
         font-family: "Roboto Condensed", sans-serif;
     }
     @media (min-height: 580px) {
@@ -233,9 +230,21 @@
     .invoice footer a:nth-of-type(2):after {
         background-color: #fe8888;
     }
+    .pdf {
+        display: inline-block;
+        width: 100%;
+        padding: 19px;
+        border: 0;
+        border-radius: 5px;
+        border-color: #fff;
+        background: #eea560;
+        color: white;
+        font-size: 1.4em;
+    }
 </style>
 {% endblock %}
 
+<body class="image-container">
 <div class="container animated fadeIn">
     <div class="invoice">
         <header>
@@ -291,8 +300,8 @@
                     <span> </span>
                     <span>{% if billet.reduction == true %}✔️{% else %}❌{% endif %}</span>
                 </figure>
-
                 {% endfor %}
+
             </section>
 
             <section>
@@ -325,13 +334,12 @@
                             "padding":"15px",
                             "background":"#eea560",
                             "color":"white",
-                            "font-size":"1.3em" }).html("Paiement par carte bancaire"
-                        );
+                            "font-size":"1.3em"
+                        }).html("Paiement par carte bancaire");
                     });
                 </script>
             </form>
         </footer>
     </div>
 </div>
-
 </body>
