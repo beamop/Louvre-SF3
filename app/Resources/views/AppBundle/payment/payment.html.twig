@@ -87,7 +87,7 @@
     }
     .invoice header {
         overflow: hidden;
-        margin-bottom: 60px;
+        margin-bottom: 10px;
     }
     .invoice header section:nth-of-type(1) {
         float: left;
@@ -234,6 +234,7 @@
     <div class="invoice">
         <header>
             {% for billet in reservation.billets %}
+            {% if loop.length == 1 %}
             <section>
                 <h1>Réservation - Votre billet</h1>
                 <span>{{ reservation.dateReservation|date('d/m/Y') }}</span>
@@ -295,35 +296,69 @@
 
         <footer>
             <a></a>
-            <form method="post">
-                <script
-                        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                        data-key="pk_test_46o7fg2iwKoCUn1BlH0fUuly"
-                        data-amount="{{ reservation.prix|number_format(2, '', '') }}"
-                        data-name="Réservation du {{ reservation.dateReservation|date('d/m/Y') }}"
-                        data-description="Musée du Louvre - Paris"
-                        data-image="{{ asset('img/louvre_logo_lite.png') }}"
-                        data-locale="auto"
-                        data-zip-code="false"
-                        data-currency="eur">
-                </script>
-                {# custom css for the default Stripe btn style #}
-                <script type="text/javascript">
-                    $(document).ready(function(){
-                        $(".stripe-button-el span").remove();
-                        $("button.stripe-button-el").removeAttr('style').css({
-                            "display":"inline-block",
-                            "width":"100%",
-                            "padding":"15px",
-                            "background":"#eea560",
-                            "color":"white",
-                            "font-size":"1.3em"
-                        }).html("Paiement par carte bancaire");
-                    });
-                </script>
-            </form>
         </footer>
+        {% else %}
+        <header class="header" style="margin-bottom: 45px;">
+            <section>
+                <h1>Réservation - Billet n°{{ loop.index }}</h1>
+                <span>{{ reservation.dateReservation|date('d/m/Y') }}</span>
+            </section>
+
+            <section>
+                <span>{{ reservation.codeReservation|slice(8,21) }}</span>
+            </section>
+        </header>
+        <table class="table">
+            <thead class="thead-default">
+            <tr>
+                <th>Demi-journée</th>
+                <th>Adresse mail</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Date de naissance</th>
+                <th>Réduction</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th>{% if reservation.demiJournee == true %}✔️{% else %}❌{% endif %}</th>
+                <td>{{ reservation.email }}</td>
+                <td>{{ billet.nom }}</td>
+                <td>{{ billet.prenom }}</td>
+                <td>{{ billet.dateNaissance|date('d/m/Y') }}</td>
+                <td>{% if billet.reduction == true %}✔️{% else %}❌{% endif %}</td>
+            </tr>
+            </tbody>
+        </table><br>
+        {% endif %}
         {% endfor %}
+        <form method="post">
+            <script
+                    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                    data-key="pk_test_46o7fg2iwKoCUn1BlH0fUuly"
+                    data-amount="{{ reservation.prix|number_format(2, '', '') }}"
+                    data-name="Réservation du {{ reservation.dateReservation|date('d/m/Y') }}"
+                    data-description="Musée du Louvre - Paris"
+                    data-image="{{ asset('img/louvre_logo_lite.png') }}"
+                    data-locale="auto"
+                    data-zip-code="false"
+                    data-currency="eur">
+            </script>
+            {# custom css for the default Stripe btn style #}
+            <script type="text/javascript">
+                $(document).ready(function(){
+                    $(".stripe-button-el span").remove();
+                    $("button.stripe-button-el").removeAttr('style').css({
+                        "display":"inline-block",
+                        "width":"100%",
+                        "padding":"15px",
+                        "background":"#eea560",
+                        "color":"white",
+                        "font-size":"1.3em"
+                    }).html("Paiement par carte bancaire " + {{ reservation.prix }} + " EUR (€)");
+                });
+            </script>
+        </form>
     </div>
 </div>
 </body>

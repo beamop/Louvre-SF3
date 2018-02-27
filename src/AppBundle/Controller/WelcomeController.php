@@ -13,7 +13,7 @@ class WelcomeController extends Controller
      */
     public function indexAction(Request $request)
     {
-        return $this->render('main/welcome.html.twig', [
+        return $this->render('AppBundle/main/welcome.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
         ]);
     }
