@@ -46,7 +46,7 @@
         <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/locales/bootstrap-datepicker.fr.min.js"></script>
 
-        <!-- JavaScript app file -->
+        <!-- JavaScript app files -->
         <script src="{{ asset('js/gsdk-bootstrap-wizard.js') }}"></script>
 
         <!--  More information about jquery.validate here: http://jqueryvalidation.org	 -->
@@ -110,9 +110,10 @@
                                                     minView: 'month',
                                                     language: 'fr',
                                                     daysOfWeekDisabled:'0,2',
+                                                    datesDisabled: [{% if "now"|date('H') > 14 %}'{{ "now"|date("d/m/Y") }}'{% else %}{% endif %}, '01/11/2018', '01/11/2019', '01/11/2020', '01/11/2021', '01/11/2022'],
                                                     startDate: '-0m',
                                                 }).on("changeDate", function(date){
-                                                    console.log(date.date);
+                                                    console.log(date.date)
                                                 });
                                             </script>
                                             <label for="appbundle_reservation_dateReservation" generated="true" class="error"></label>
@@ -171,6 +172,12 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form" id="form"
+                                     data-prototype="
+                                     {% filter escape %}
+                                         {{ include('prototype.html.twig', { 'form': form.billets.vars.prototype|e }) }}
+                                     {% endfilter %}">
+                                </div>
                             </div>
                             <div class="tab-pane" id="confirmation">
                                 <div class="row">
@@ -198,6 +205,8 @@
                         </div>
                         <div class="wizard-footer height-wizard">
                             <div class="pull-right">
+                                <input type='button' class='btn btn-fill btn-warning btn-wd btn-sm' value='Supprimer billet' onclick="$('.form').children().last().remove();" />
+                                <input type='button' class='btn btn-fill btn-warning btn-wd btn-sm' value='Ajouter billet' onclick="addBillet($container);" />
                                 <input type='button' class='btn btn-next btn-fill btn-warning btn-wd btn-sm' name='suivant' value='Suivant' />
                                 {{ form_widget(form.save) }}
                             </div>
@@ -223,6 +232,8 @@
     <!-- Javascript jQuery Validation Localization -->
     <script src="{{ asset('js/validator.messages_fr.js') }}" type="text/javascript"></script>
 
+    <!-- JavaScript app files -->
+    <script src="{{ asset('js/appendbillet.js') }}"></script>
 </div>
 
 </body>

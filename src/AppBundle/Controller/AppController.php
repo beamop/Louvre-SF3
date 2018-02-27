@@ -39,7 +39,7 @@ class AppController extends Controller
             $em->flush();
 
             return $this->redirectToRoute('confirmation', array(
-                'id' => $reservation->getId(),
+                'id' => $reservation->getId()
             ));
         }
 
@@ -47,7 +47,7 @@ class AppController extends Controller
 
         return $this->render('reservation/reservation.html.twig', array(
             'form' => $formView,
-            'listDatesCompletes' => $listDatesCompletes,
+            'listDatesCompletes' => $listDatesCompletes
         ));
     }
 
@@ -66,7 +66,7 @@ class AppController extends Controller
     {
         return $this->render('payment/payment.html.twig', array(
             'reservation' => $reservation,
-            'template' => 'reservation/reservation.html.twig',
+            'template' => 'reservation/reservation.html.twig'
         ));
     }
 
@@ -84,7 +84,7 @@ class AppController extends Controller
         return $this->render('merci/merci.html.twig', array(
             'reservation' => $reservation,
             'template_reservation' => 'reservation/reservation.html.twig',
-            'template_payment' => 'payment/payment.html.twig',
+            'template_payment' => 'payment/payment.html.twig'
         ));
     }
 

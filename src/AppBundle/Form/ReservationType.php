@@ -24,16 +24,16 @@ class ReservationType extends AbstractType
             ->add('dateReservation', TextType::class, array(
                 'attr' => array(
                     'placeholder' => date('d-m-Y')
-                ),
+                )
             ))
             ->add('email', EmailType::class, array(
                 'attr' => array(
                     'placeholder' => 'email@domain.com'
-                ),
+                )
             ))
             ->add('demiJournee', CheckboxType::class, array(
                 'label' => 'Demi journée*',
-                'required' => false,
+                'required' => false
             ))
             ->add('billets', CollectionType::class, array(
                 'entry_type' => BilletType::class,
@@ -43,13 +43,13 @@ class ReservationType extends AbstractType
                 'label' => 'Billet',
                 'constraints' => array(
                     new Valid()
-                ),
+                )
             ))
             ->add('save', SubmitType::class, array(
                 'label' => 'Valider la réservation',
                 'attr' => array(
                     'class' => 'btn btn-finish btn-fill btn-warning btn-wd btn-sm'
-                ),
+                )
             ))
         ;
     }

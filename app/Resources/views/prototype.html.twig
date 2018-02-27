@@ -1,0 +1,36 @@
+<div class="row">
+    <div class="col-sm-20">
+        <div class="form-group">
+            <div class="col-sm-5 col-sm-offset-1">
+                <div class="form-group">
+                    {{ form_label(form.nom) }}
+                    {{ form_widget(form.nom) }}
+                </div>
+            </div>
+            <div class="col-sm-5">
+                <div class="form-group">
+                    {{ form_label(form.prenom) }}
+                    {{ form_widget(form.prenom) }}
+                </div>
+            </div>
+            <div class="col-sm-5 col-sm-offset-1">
+                <div class="form-group">
+                    {{ form_label(form.pays) }}
+                    {{ form_widget(form.pays) }}
+                </div>
+            </div>
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <label style="margin-left: 4.2%;">Date de naissance</label>
+                    {{ form_widget(form.dateNaissance) }}
+                </div>
+            </div>
+            <div style="margin: 10px 0 0 44%;">
+                <div class="form-group">
+                    {{ form_label(form.reduction) }}
+                    {{ form_widget(form.reduction) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

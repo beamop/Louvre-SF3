@@ -24,17 +24,17 @@ class BilletType extends AbstractType
                 'label' => 'Nom',
                 'attr' => array(
                     'placeholder' => 'Nom'
-                ),
+                )
             ))
             ->add('prenom', TextType::class, array(
                 'label' => 'Prénom',
                 'attr' => array(
                     'placeholder' => 'Prénom'
-                ),
+                )
             ))
             ->add('reduction', CheckboxType::class, array(
                 'label' => 'Tarif réduit',
-                'required' => false,
+                'required' => false
             ))
             ->add('dateNaissance', DateType::class, array(
                 'label' => 'Date de naissance',
@@ -44,11 +44,11 @@ class BilletType extends AbstractType
                     'month' => 'MM',
                     'day' => 'JJ'
                 ),
-                'years' => range(2018, 1918),
+                'years' => range(2018, 1918)
             ))
             ->add('pays', CountryType::class, array(
                 'label' => 'Pays',
-                'placeholder' => 'Sélectionnez un pays',
+                'placeholder' => 'Sélectionnez un pays'
             ))
         ;
     }
