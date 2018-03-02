@@ -45,7 +45,7 @@ class AppController extends Controller
 
         $formView = $form->createView();
 
-        return $this->render('AppBundle/reservation/reservation.html.twig', array(
+        return $this->render('AppBundle/AppController/reservation/reservation.html.twig', array(
             'form' => $formView,
             'listDatesCompletes' => $listDatesCompletes
         ));
@@ -64,9 +64,9 @@ class AppController extends Controller
      */
     public function confirmationAction(Reservation $reservation, Request $request, StripePayment $payment)
     {
-        return $this->render('AppBundle/payment/payment.html.twig', array(
+        return $this->render('AppBundle/AppController/payment/payment.html.twig', array(
             'reservation' => $reservation,
-            'template' => 'AppBundle/reservation/reservation.html.twig'
+            'template' => 'AppBundle/AppController/reservation/reservation.html.twig'
         ));
     }
 
@@ -81,10 +81,10 @@ class AppController extends Controller
      */
     public function merciAction(Reservation $reservation, Request $request)
     {
-        return $this->render('AppBundle/merci/merci.html.twig', array(
+        return $this->render('AppBundle/AppController/merci/merci.html.twig', array(
             'reservation' => $reservation,
-            'template_reservation' => 'AppBundle/reservation/reservation.html.twig',
-            'template_payment' => 'AppBundle/payment/payment.html.twig'
+            'template_reservation' => 'AppBundle/AppController/reservation/reservation.html.twig',
+            'template_payment' => 'AppBundle/AppController/payment/payment.html.twig'
         ));
     }
 

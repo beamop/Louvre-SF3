@@ -32,7 +32,7 @@ class PaymentListener
         if($request->get('_route') == 'confirmation' && $request->getMethod() == 'POST') {
             $id = $request->get('id');
             $reservation = $this->em->getRepository("AppBundle:Reservation")->findOneBy(['id' => $id]);
-            if(!$reservation->isPayer()) {
+            if (!$reservation->isPayer()) {
                 $emailStripe = $request->request->get("stripeEmail");
                 $stripeToken = $request->request->get("stripeToken");
                 $this->payment->payed($emailStripe, $stripeToken, $reservation);

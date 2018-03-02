@@ -175,7 +175,7 @@
                                 <div class="form" id="form"
                                      data-prototype="
                                      {% filter escape %}
-                                         {{ include('prototype.html.twig', { 'form': form.billets.vars.prototype|e }) }}
+                                         {{ include('AppBundle/AppController/prototype.html.twig', { 'form': form.billets.vars.prototype|e }) }}
                                      {% endfilter %}">
                                 </div>
                             </div>
@@ -204,13 +204,13 @@
                             </div>
                         </div>
                         <div class="wizard-footer height-wizard">
-                            <div class="pull-right">
-                                <input type='button' class='btn btn-fill btn-warning btn-wd btn-sm' value='Supprimer billet' onclick="$('.form').children().last().remove();" />
-                                <input type='button' class='btn btn-fill btn-warning btn-wd btn-sm' value='Ajouter billet' onclick="addBillet($container);" />
-                                <input type='button' class='btn btn-next btn-fill btn-warning btn-wd btn-sm' name='suivant' value='Suivant' />
+                            <div class="pull-right" id="btn-parent">
+                                <input type='button' class='btn btn-del btn-fill btn-warning btn-wd btn-sm' value='Supprimer billet' onclick="$('.form').children().last().remove();" />
+                                <input type='button' class='btn btn-add btn-fill btn-warning btn-wd btn-sm' value='Ajouter billet' onclick='addBillet($container);' />
+                                <input type='button' class='btn btn-next btn-fill btn-warning btn-wd btn-sm' name='suivant' id='suivant' value='Suivant' />
                                 {{ form_widget(form.save) }}
                             </div>
-                            <div class="pull-left">
+                            <div class="pull-left" id="btn-parent">
                                 <input type='button' class='btn btn-previous btn-fill btn-default btn-wd btn-sm' name='precedent' value='Précédent' />
                             </div>
                             <div class="clearfix"></div>

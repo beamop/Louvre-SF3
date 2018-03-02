@@ -36,7 +36,7 @@ $(document).ready(function(){
 		    },
 		    email: {
 		      required: true,
-		      minlength: 3,
+		      minlength: 3
 		    }
         }
 	});
@@ -74,9 +74,13 @@ $(document).ready(function(){
            $('.wizard-card .wizard-navigation').append($moving_div);
            refreshAnimation($wizard, index);
            $('.moving-tab').css('transition','transform 0s');
+
+           // Hide del & add buttons on init
+           $('.wizard-card').find('.btn-del').hide();
+           $('.wizard-card').find('.btn-add').hide();
        },
 
-        onTabClick : function(tab, navigation, index){
+        onTabClick: function(tab, navigation, index){
 
             var $valid = $('.wizard-card form').valid();
 
@@ -100,6 +104,15 @@ $(document).ready(function(){
             } else {
                 $($wizard).find('.btn-next').show();
                 $($wizard).find('.btn-finish').hide();
+            }
+
+            // If current tab == 2 then show del & add buttons
+            if($current == 2) {
+                $('.wizard-card').find('.btn-del').show();
+                $('.wizard-card').find('.btn-add').show();
+            } else {
+                $('.wizard-card').find('.btn-del').hide();
+                $('.wizard-card').find('.btn-add').hide();
             }
 
             button_text = navigation.find('li:nth-child(' + $current + ') a').html();
@@ -165,7 +178,7 @@ function readURL(input) {
 
         reader.onload = function (e) {
             $('#wizardPicturePreview').attr('src', e.target.result).fadeIn('slow');
-        }
+        };
         reader.readAsDataURL(input.files[0]);
     }
 }
