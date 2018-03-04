@@ -254,7 +254,8 @@ class Reservation
 
     public function addPayement()
     {
-        $this->payer = true;
+        //$this->payer = true;
+        $this->setPayer(true);
 
         return $this;
     }
@@ -311,6 +312,8 @@ class Reservation
     {
         return $this->payer;
     }
+
+
 
     public function memeJour()
     {

@@ -298,38 +298,24 @@
             <a></a>
         </footer>
         {% else %}
-        <header class="header" style="margin-bottom: 45px;">
-            <section>
-                <h1>Réservation - Billet n°{{ loop.index }}</h1>
-                <span>{{ reservation.dateReservation|date('d/m/Y') }}</span>
-            </section>
-
-            <section>
-                <span>{{ reservation.codeReservation|slice(8,21) }}</span>
-            </section>
-        </header>
-        <table class="table">
-            <thead class="thead-default">
-            <tr>
-                <th>Demi-journée</th>
-                <th>Adresse mail</th>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Date de naissance</th>
-                <th>Réduction</th>
-            </tr>
-            </thead>
+        <div id="head-parent">
+            <script>
+                var dateBillet = "{{ reservation.dateReservation|date('d/m/Y') }}";
+                var codeResa = "{{ reservation.codeReservation|slice(8,21) }}";
+                var html = "<header class=\"header\" style=\"margin-bottom: 45px;\"><section><h1>Réservation - Vos billets</h1><span>" + dateBillet + "</span></section><section><span>" + codeResa + "</span></section></header><table class=\"table\"><thead class=\"thead-default\"><tr><th>Demi-journée</th><th>Adresse mail</th><th>Nom</th><th>Prénom</th><th>Date de naissance</th><th>Réduction</th></tr></thead>";
+                $("#head-parent").html(html);
+            </script>
             <tbody>
-            <tr>
-                <th>{% if reservation.demiJournee == true %}✔️{% else %}❌{% endif %}</th>
-                <td>{{ reservation.email }}</td>
-                <td>{{ billet.nom }}</td>
-                <td>{{ billet.prenom }}</td>
-                <td>{{ billet.dateNaissance|date('d/m/Y') }}</td>
-                <td>{% if billet.reduction == true %}✔️{% else %}❌{% endif %}</td>
-            </tr>
-            </tbody>
-        </table><br>
+                <tr>
+                    <th>{% if reservation.demiJournee == true %}✔️{% else %}❌{% endif %}</th>
+                    <td>{{ reservation.email }}</td>
+                    <td>{{ billet.nom }}</td>
+                    <td>{{ billet.prenom }}</td>
+                    <td>{{ billet.dateNaissance|date('d/m/Y') }}</td>
+                    <td>{% if billet.reduction == true %}✔️{% else %}❌{% endif %}</td>
+                </tr>
+            </tbody></table><br>
+        </div>
         {% endif %}
         {% endfor %}
         <form method="post">

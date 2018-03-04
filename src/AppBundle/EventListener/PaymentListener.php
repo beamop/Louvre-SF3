@@ -2,7 +2,7 @@
 
 namespace AppBundle\EventListener;
 
-use AppBundle\Entity\Reservation;
+use AppBundle\Mailer\SwiftMailer;
 use AppBundle\Payment\StripePayment;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
@@ -18,12 +18,14 @@ class PaymentListener
      * @var Router
      */
     private $router;
+    private $swiftmailer;
 
-    public function __construct(StripePayment $payment, EntityManagerInterface $entityManager, RouterInterface $router)
+    public function __construct(StripePayment $payment, EntityManagerInterface $entityManager, RouterInterface $router, SwiftMailer $swiftMailer)
     {
         $this->payment = $payment;
         $this->em = $entityManager;
         $this->router = $router;
+        $this->swiftmailer = $swiftMailer;
     }
 
     public function processingPayment(GetResponseEvent $responseEvent)
@@ -38,6 +40,11 @@ class PaymentListener
                 $this->payment->payed($emailStripe, $stripeToken, $reservation);
 
                 $responseEvent->setResponse(new RedirectResponse($this->router->generate('merci', ['id' => $id])));
+
+                /*
+                 * Email
+                 */
+                $this->swiftmailer->sendEmail($reservation);
             }
         }
     }

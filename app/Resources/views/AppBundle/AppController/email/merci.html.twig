@@ -1,0 +1,102 @@
+{% block stylesheet %}
+<style>
+    body {
+        font-family: sans-serif;
+        background: #fff;
+    }
+
+    h1 {
+        display: block;
+        color: #7f692d9e;
+        font-size: 1.6em;
+        -webkit-margin-before: 0.67em;
+        -webkit-margin-after: 0.67em;
+        -webkit-margin-start: 0px;
+        -webkit-margin-end: 0px;
+        font-weight: lighter;
+    }
+
+    .email--background {
+        background: #eee;
+        padding: 10px;
+        text-align: center;
+    }
+    .email--container, .pre-header {
+        max-width: 500px;
+        background: #fff;
+        margin: 0 auto;
+        overflow: hidden;
+        border-radius: 5px;
+    }
+    .email--inner-container {
+        padding: 0 5% 40px;
+    }
+
+    .pre-header {
+        background: #eee;
+        color: #eee;
+        font-size: 5px;
+    }
+
+    img {
+        max-width: 100%;
+        display: block;
+    }
+
+    p {
+        font-size: 16px;
+        line-height: 1.5;
+        color: #a2a2a2;
+        margin-bottom: 30px;
+    }
+
+    .cta {
+        display: inline-block;
+        padding: 10px 20px;
+        color: #fff;
+        background: #373629;
+        text-decoration: none;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        border-radius: 5px;
+        font-size: 13px;
+    }
+
+    .footer-junk {
+        padding: 20px;
+        font-size: 10px;
+    }
+    .footer-junk a {
+        color: #bbbbbb;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="email--background">
+
+    <div class="pre-header">
+    </div>
+
+    <div class="email--container">
+        <img src="https://res.cloudinary.com/dlis7nn34/image/upload/v1520064298/head-img.jpg">
+
+        <div class="email--inner-container">
+            <h1>Merci pour votre réservation</h1>
+            <p>
+                Réservation <b>#{{ reservation.codeReservation|slice(8,21) }}</b><br>
+                Réservation de billets pour le <b>{{ reservation.dateReservation|date('d/m/Y') }}</b><br>
+                Vous trouverez <b>en pièce-jointe</b> les billets pour votre visite.<br>
+                Si vous béneficiez de réduction <b>des justificatifs vous seront demandés à l'entrée du Musée</b>.
+            </p>
+            <a href="https://res.cloudinary.com/dlis7nn34/image/upload/v1520057373/plan-musée-louvre.jpg" class="cta">Plan du Musée</a>
+        </div>
+
+    </div>
+
+    <div class="footer-junk">
+        <a href="#">Me Désinscrire</a>
+    </div>
+
+</div>
+{% endblock %}

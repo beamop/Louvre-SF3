@@ -44,7 +44,8 @@ class BilletType extends AbstractType
                     'month' => 'MM',
                     'day' => 'JJ'
                 ),
-                'years' => range(2018, 1918)
+                'years' => range(2018, 1918),
+                'required' => false
             ))
             ->add('pays', CountryType::class, array(
                 'label' => 'Pays',

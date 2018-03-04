@@ -51,7 +51,7 @@ class StripePayment
         }
 
         /*
-         * Vérification du paiement.
+         * Vérification du paiement. (prod)
          */
         if (isset($charge) && $charge->paid) {
             $reservation->addPayement();

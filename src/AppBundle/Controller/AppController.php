@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Billet;
 use AppBundle\Entity\Reservation;
 use AppBundle\Form\ReservationType;
+use AppBundle\Mailer\SwiftMailer;
 use AppBundle\Payment\StripePayment;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -73,7 +74,7 @@ class AppController extends Controller
     /**
      * @Route("/merci/{id}", name="merci")
      *
-     * @Security("request.getClientIp() == reservation.getIp()", statusCode=403, message="Une erreur est survenue.")
+     * @Security("request.getClientIp() == reservation.getIp() && reservation.isPayer() == true", statusCode=403, message="Une erreur est survenue.")
      *
      * @param Request $request
      * @param Reservation $reservation
