@@ -32,7 +32,7 @@ class ReservationType extends AbstractType
                 )
             ))
             ->add('demiJournee', CheckboxType::class, array(
-                'label' => 'Demi journée*',
+                'label' => 'Demi-journée*',
                 'required' => false
             ))
             ->add('billets', CollectionType::class, array(

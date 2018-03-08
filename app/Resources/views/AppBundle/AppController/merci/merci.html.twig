@@ -16,57 +16,34 @@
             </section>
         </header>
 
-        <main>
-            <section>
-                <span>Récapitulatif</span>
-            </section>
-
-            <section>
-                <figure>
-                    <span>Nombre de billet(s)</span>
-                    <span> </span>
-                    <span>{{ reservation.billets|length }}</span>
-                </figure>
-
-                <figure>
-                    <span>Demi-journée</span>
-                    <span> </span>
-                    <span>{% if reservation.demiJournee == true %}✔️{% else %}❌{% endif %}</span>
-                </figure>
-
+        <div id="head-parent">
+            <table class="table">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col">Demi-journée</th>
+                    <th scope="col">Adresse mail</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Prénom</th>
+                    <th scope="col">Date de naissance</th>
+                    <th scope="col">Naissance</th>
+                    <th scope="col">Prix</th>
+                </tr>
+                </thead>
+                <tbody>
                 {% for billet in reservation.billets %}
-                    <figure>
-                        <span>Nom</span>
-                        <span> </span>
-                        <span>{{ billet.nom }}</span>
-                    </figure>
-
-                    <figure>
-                        <span>Prénom</span>
-                        <span> </span>
-                        <span>{{ billet.prenom }}</span>
-                    </figure>
-
-                    <figure>
-                        <span>Date de naissance</span>
-                        <span> </span>
-                        <span>{{ billet.dateNaissance|date('d/m/Y') }}</span>
-                    </figure>
-
-                    <figure>
-                        <span>Réduction</span>
-                        <span> </span>
-                        <span>{% if billet.reduction == true %}✔️{% else %}❌{% endif %}</span>
-                    </figure>
+                    <tr>
+                        <th>{% if reservation.demiJournee == true %}✔️{% else %}❌{% endif %}</th>
+                        <td>{{ reservation.email }}</td>
+                        <td>{{ billet.nom }}</td>
+                        <td>{{ billet.prenom }}</td>
+                        <td>{{ billet.dateNaissance|date('d/m/Y') }}</td>
+                        <td>{% if billet.reduction == true %}✔️{% else %}❌{% endif %}</td>
+                        <td>{{ billet.prix }} EUR</td>
+                    </tr>
                 {% endfor %}
-
-            </section>
-
-            <section>
-                <span>Prix TTC</span>
-                <span>{{ reservation.prix }} EUR (€)</span>
-            </section>
-        </main>
+                </tbody>
+            </table>
+        </div>
 
         <footer>
             <a></a>

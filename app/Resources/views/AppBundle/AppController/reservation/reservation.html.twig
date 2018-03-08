@@ -113,6 +113,10 @@
                                                     datesDisabled: [{% if "now"|date('H') > 14 %}'{{ "now"|date("d/m/Y") }}'{% else %}{% endif %}, '01/11/2018', '01/11/2019', '01/11/2020', '01/11/2021', '01/11/2022'],
                                                     startDate: '-0m',
                                                 }).on("changeDate", function(date){
+                                                    {% if "now"|date('H') > 14 %}
+                                                    $('#appbundle_reservation_demiJournee').prop('checked', false);
+                                                    $('#appbundle_reservation_demiJournee').prop('disabled', false);
+                                                    {% endif %}
                                                     console.log(date.date)
                                                 });
                                             </script>
@@ -121,13 +125,16 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="radio">
-                                                <label>{{ form_row(form.demiJournee) }}</label>
+                                                <label>
+                                                    <input type="checkbox" id="appbundle_reservation_demiJournee" name="appbundle_reservation[demiJournee]" class="form-check-input" value="1" {% if "now"|date('H') > 14 %}checked disabled{% endif %} />  Demi-journée
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-sm-10 col-sm-offset-1">
                                         <div class="form-group text-center">
                                             <label style="margin: 25px 0 0 0;">Les billets en demi journée ne permettent l'accès au musée à partir de 14 heures.</label>
+                                            {% if "now"|date('H') > 14 %}<label style="margin: 25px 0 0 0;color: #eea560;">Visite en demi-journée obligatoire après 14 heures.</label>{% endif %}
                                         </div>
                                     </div>
                                 </div>
