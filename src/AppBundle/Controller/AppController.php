@@ -10,6 +10,7 @@ use AppBundle\Payment\StripePayment;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class AppController extends Controller
@@ -87,6 +88,36 @@ class AppController extends Controller
             'template_reservation' => 'AppBundle/AppController/reservation/reservation.html.twig',
             'template_payment' => 'AppBundle/AppController/payment/payment.html.twig'
         ));
+    }
+
+    /**
+     * @Route("/files/pdf/{id}", name="pdf")
+     *
+     * @Security("request.getClientIp() == reservation.getIp() && reservation.isPayer() == true", statusCode=403, message="Une erreur est survenue.")
+     */
+    public function pdfAction(Reservation $reservation)
+    {
+        $snappy = $this->get("knp_snappy.pdf");
+
+        $snappy->setOption('zoom', 1.2);
+
+        $view = $this->renderView("AppBundle/AppController/pdf/pdf.html.twig", array(
+            'reservation' => $reservation
+        ));
+
+        return new Response(
+            $snappy->getOutputFromHtml($view, array(
+                'title' => 'Billeterie - Musée du Louvre - Votre billet',
+                'images' => true
+            )),
+            200,
+            array(
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename=votre_billet.pdf'
+            )
+        );
+
+
     }
 
 }
