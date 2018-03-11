@@ -22,7 +22,7 @@
         text-align: center;
     }
     .email--container, .pre-header {
-        max-width: 500px;
+        max-width: 700px;
         background: #fff;
         margin: 0 auto;
         overflow: hidden;
@@ -86,10 +86,9 @@
             <p>
                 Réservation <b>#{{ reservation.codeReservation|slice(8,21) }}</b><br>
                 Réservation de billets pour le <b>{{ reservation.dateReservation|date('d/m/Y') }}</b><br>
-                Vous trouverez <b>en pièce-jointe</b> les billets pour votre visite.<br>
-                Si vous béneficiez de réduction <b>des justificatifs vous seront demandés à l'entrée du Musée</b>.
+                En cas de réduction <b>des justificatifs vous seront demandés à l'entrée du Musée</b>.
             </p>
-            <a href="https://res.cloudinary.com/dlis7nn34/image/upload/v1520057373/plan-musee-louvre.jpg" class="cta">Plan du Musée</a>
+            <a href="/files/pdf/{{ reservation.id }}" class="cta">Voir mon billet</a>
         </div>
 
     </div>

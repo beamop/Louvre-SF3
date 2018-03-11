@@ -34,6 +34,9 @@ class BilletType extends AbstractType
             ))
             ->add('reduction', CheckboxType::class, array(
                 'label' => 'Tarif réduit',
+                'attr' => array(
+                    'onclick' => 'warnTarif();'
+                ),
                 'required' => false
             ))
             ->add('dateNaissance', DateType::class, array(

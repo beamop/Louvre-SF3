@@ -1,3 +1,12 @@
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
 {% block stylesheet %}
     <style>
         body {
@@ -22,7 +31,7 @@
             text-align: center;
         }
         .email--container, .pre-header {
-            max-width: 500px;
+            max-width: 700px;
             background: #fff;
             margin: 0 auto;
             overflow: hidden;
@@ -87,21 +96,33 @@
         <div class="email--container">
             <img src="https://res.cloudinary.com/dlis7nn34/image/upload/v1520064298/head-img.jpg">
 
-            <div class="email--inner-container">
-                <h1>Merci pour votre réservation</h1>
-                <p>
-                    <u>Vos informations</u><br>
-                    Votre nom : <b>{{ billet.nom }}</b><br>
-                    Votre prénom : <b>{{ billet.prenom }}</b><br>
-                    Votre date de naissance : <b>{{ billet.dateNaissance|date('d/m/Y') }}</b><br>
-                    Réservation <b>#{{ reservation.codeReservation|slice(8,21) }}</b><br>
-                    Réservation de billets pour le <b>{{ reservation.dateReservation|date('d/m/Y') }}</b><br>
-                    Prix TTC de la réservation : <b>{{ reservation.prix }} EUR (€)</b><br>
-                    Si vous béneficiez de réduction <b>des justificatifs vous seront demandés à l'entrée du Musée</b>.
-                </p>
+            <div class="email--inner-container container">
+                <h1>Merci pour votre réservation</h1><br>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Naissance</th>
+                        <th>Date réservation</th>
+                        <th>Code réservation</th>
+                        <th>Prix</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{{ billet.nom }}</td>
+                        <td>{{ billet.prenom }}</td>
+                        <td>{{ billet.dateNaissance|date('d/m/Y') }}</td>
+                        <td>{{ reservation.dateReservation|date('d/m/Y') }}</td>
+                        <td>{{ reservation.codeReservation|slice(8,21) }}</td>
+                        <td>{{ reservation.prix }} €</td>
+                    </tr>
+                    </tbody>
+                </table>
                 <a href="https://res.cloudinary.com/dlis7nn34/image/upload/v1520057373/plan-musee-louvre.jpg" class="cta">Plan du Musée</a>
-            </div>
 
+            </div>
         </div>
 
         <div class="footer-junk">
