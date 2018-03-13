@@ -88,7 +88,7 @@
                 Réservation de billets pour le <b>{{ reservation.dateReservation|date('d/m/Y') }}</b><br>
                 En cas de réduction <b>des justificatifs vous seront demandés à l'entrée du Musée</b>.
             </p>
-            <a href="/files/pdf/{{ reservation.id }}" class="cta">Voir mon billet</a>
+            <a href="{{ app.request.uri }}/files/pdf/{{ reservation.id }}" class="cta">Voir mon billet</a>
         </div>
 
     </div>
